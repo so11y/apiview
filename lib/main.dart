@@ -1,4 +1,5 @@
 import 'package:apiview/reactive/effect.dart';
+import 'package:apiview/reactive/fulWidget.dart';
 import 'package:apiview/reactive/index.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +42,7 @@ class MyHomePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 MyHomePage1(value: x.get()),
+                MyFullSimpleWidget()
               ],
             )),
       ),
@@ -75,5 +77,23 @@ class _MyHomePage1State extends State<MyHomePage1> {
           x.value += widget.value + 3;
         },
         child: Text('${x.value}-${widget.value}')));
+  }
+}
+
+class MyFullSimpleWidget extends DefineFulWidget {
+  MyFullSimpleWidget({super.key});
+
+  @override
+  BuilderWidget setup(BuildContext context) {
+    var x = UseState(1);
+    return () {
+      return Container(
+        child: ElevatedButton(
+            onPressed: () {
+              x.value += 3;
+            },
+            child: Text(x.value.toString())),
+      );
+    };
   }
 }

@@ -15,7 +15,7 @@ class _EffectState extends State<Effect> with ReactiveEffectMixin<Effect> {
   void initState() {
     super.initState();
     reactiveEffect = ReactiveEffect(
-        fn: () => widget.builder(),
+        fn: widget.builder,
         computed: () {
           setState(() {});
         });

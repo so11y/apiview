@@ -10,27 +10,29 @@ class Effect extends StatefulWidget {
   State<Effect> createState() => _EffectState();
 }
 
-class _EffectState extends State<Effect> {
-  late ReactiveEffect _reactiveEffect;
-
+class _EffectState extends State<Effect> with ReactiveEffectMixin<Effect> {
   @override
   void initState() {
     super.initState();
-    _reactiveEffect = ReactiveEffect(
+    reactiveEffect = ReactiveEffect(
         fn: () => widget.builder(),
         computed: () {
           setState(() {});
         });
   }
+}
+
+mixin ReactiveEffectMixin<T extends StatefulWidget> on State<T> {
+  late ReactiveEffect reactiveEffect;
 
   @override
   Widget build(BuildContext context) {
-    return _reactiveEffect.run();
+    return reactiveEffect.run();
   }
 
   @override
   void dispose() {
+    reactiveEffect.dispose();
     super.dispose();
-    _reactiveEffect.dispose();
   }
 }

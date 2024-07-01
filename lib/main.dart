@@ -42,7 +42,7 @@ class MyHomePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 MyHomePage1(value: x.get()),
-                MyFullSimpleWidget()
+                MyFullSimpleWidget(a: x.get())
               ],
             )),
       ),
@@ -80,11 +80,14 @@ class _MyHomePage1State extends State<MyHomePage1> {
   }
 }
 
-class MyFullSimpleWidget extends DefineFulWidget {
-  MyFullSimpleWidget({super.key});
+class MyFullSimpleWidget extends DefineFulWidget<MyFullSimpleWidget> {
+  int a;
+  MyFullSimpleWidget({required this.a, super.key});
 
+  //问题是这里State要mixin的话怎么办
   @override
-  BuilderWidget setup(BuildContext context) {
+  BuilderWidget setup(
+      BuildContext context, FulWidget<MyFullSimpleWidget> widget) {
     var x = UseState(1);
     return () {
       return Container(
@@ -92,7 +95,7 @@ class MyFullSimpleWidget extends DefineFulWidget {
             onPressed: () {
               x.value += 3;
             },
-            child: Text(x.value.toString())),
+            child: Text("${x.value.toString()}-${widget().a}")),
       );
     };
   }

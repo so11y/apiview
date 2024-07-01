@@ -4,27 +4,25 @@ import 'effect.dart';
 import 'index.dart';
 
 typedef BuilderWidget = Widget Function();
+typedef FulWidget<T> = T Function();
 
-abstract class DefineFulWidget extends StatefulWidget {
-  // ignore: prefer_const_constructors_in_immutables
-  DefineFulWidget({super.key});
+abstract class DefineFulWidget<T> extends StatefulWidget {
+  const DefineFulWidget({super.key});
 
-  BuilderWidget setup(
-    BuildContext context,
-  );
+  BuilderWidget setup(BuildContext context, FulWidget<T> widget);
 
   @override
-  State<DefineFulWidget> createState() => _StatefulBuilderState();
+  State<DefineFulWidget> createState() => _StatefulBuilderState<T>();
 }
 
-class _StatefulBuilderState extends State<DefineFulWidget>
+class _StatefulBuilderState<T> extends State<DefineFulWidget>
     with ReactiveEffectMixin<DefineFulWidget> {
   late Widget Function() render;
 
   @override
   void initState() {
     super.initState();
-    render = widget.setup(context);
+    render = widget.setup(context, () => context.widget as T);
     reactiveEffect = ReactiveEffect(
         fn: render,
         computed: () {
